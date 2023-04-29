@@ -1,47 +1,41 @@
 <script setup lang="ts">
-import { text } from 'stream/consumers';
-import { ref } from 'vue';
+import BiologyPlayerSelector from '../components/BiologyPlayerSelector.vue'
 import { reactive } from 'vue';
-import { computed } from 'vue';
- 
-const content: Array<{name: string, description: string, id: number}> = [
-  {
-    name: "必修一",
-    description: "分子与细胞", 
-    id: 0,
-  },
-  {
-    name: "必修二",
-    description: "遗传与进化",
-    id: 1,
-  },
-  {
-    name: "必修三",
-    description: "稳态与环境",
-    id: 2,
-  },
-  {
-    name: "选择性必修一",
-    description: "稳态与调节",
-    id: 3,
-  },
-  {
-    name: "选择性必修二",
-    description: "生物与环境",
-    id: 4,
-  },
-  {
-    name: "选择性必修三",
-    description: "生物技术与工程",
-    id: 5,
-  },
-];
+import { bioStore } from '../store';
+const state = reactive({isPlaying: false});
+const playStore = bioStore();
 
-let player: SpeechSynthesisUtterance = new SpeechSynthesisUtterance();
-let items = ref(content);
-let select = ref({name: ""});
+let player = new SpeechSynthesisUtterance();
+
+player.onend = function() {
+  speechSynthesis.pause();
+  if(speechSynthesis.pending == false && speechSynthesis.speaking == false) {
+    speechSynthesis.cancel();
+    state.isPlaying = false;
+  }
+  else setTimeout(() => {speechSynthesis.resume()}, playStore.playTimeout);
+
+}
+
+
 function play(): void{
-  speechSynthesis.speak(player);
+  state.isPlaying = true;
+  if(speechSynthesis.paused == true) {
+    speechSynthesis.resume();
+    return;
+  }
+
+  playStore
+    .names
+    .forEach((element) => {
+      player.text = element;
+      speechSynthesis.speak(player);
+    });
+}
+
+function pause(): void{
+  speechSynthesis.pause();
+  state.isPlaying = false;
 }
 
 </script>
@@ -49,24 +43,10 @@ function play(): void{
   <v-container class="d-flex" fluid >
     <v-row class="align-self-center">
       <v-col class="d-flex justify-center" cols="12">
-        <VBtn icon = "mdi-play" @click="play"></VBtn>
+        <VBtn v-show="!state.isPlaying" icon = "mdi-play" @click="play"></VBtn>
+        <VBtn v-show="state.isPlaying" icon="mdi-pause" @click="pause"></VBtn>
       </v-col>
-      <v-col cols="4"></v-col>
-      <v-col class="justify-end" cols="4">
-        <VSelect
-          clearable
-          label="Book"
-          v-model="select"
-          :hint="`${select.name}`"
-          item-title="name"
-          :items="items"
-          persistent-hint
-          return-object
-          >
-        </VSelect>
-        
-      </v-col>
-      <v-col cols="4" class="align-start justify-start"><VBtn icon="mdi-check"></VBtn></v-col>
+      <BiologyPlayerSelector></BiologyPlayerSelector>
     </v-row>
   </v-container>
 </template>
