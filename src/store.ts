@@ -3,7 +3,7 @@ import { ref, Ref } from "vue";
 
 
 const bioStore = defineStore("biology", () => {
-    const questions: Ref<Array<{name: string, description: string}>> = ref([]);
+    const questions: Ref<Array<string[]>> = ref([]);
 
     return { questions }
 });

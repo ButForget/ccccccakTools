@@ -40,8 +40,8 @@ const router = useRouter();
 const store = bioStore();
 interface selectorState {
   selectedBooks: {name: string, description: string, uri: string} | undefined
-  selectedQuestions: Array<{name: string, description: string}> | undefined
-  questions: Array<{name: string, description: string}> | undefined
+  selectedQuestions: Array<string[]> | undefined
+  questions: Array<Array<string>> | undefined
 }
 const state: selectorState = reactive({
   selectedBooks: undefined,
@@ -88,12 +88,12 @@ function getSetence(){
           <v-card class="justify-center" width="70vh">
             <v-card-item density="compact">
             <v-checkbox
-              :label="item.name"
+              :label="item[0]"
               :value="item"
               v-model="state.selectedQuestions"
             >
             </v-checkbox>
-            <v-card-text class="text-h6 justify-center">{{ item.description }}</v-card-text>
+            <v-card-text class="text-h6 justify-center">{{ item[1] }}</v-card-text>
             </v-card-item>
           </v-card>
         </v-col>

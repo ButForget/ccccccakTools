@@ -1,4 +1,5 @@
 import BiologyPlayer from './views/BiologyPlayer.vue';
+import BiologySelector from './views/BiologySelector.vue';
 import {createRouter, createWebHashHistory} from "vue-router";
 
 const routes = [
