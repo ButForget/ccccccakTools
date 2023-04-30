@@ -15,11 +15,6 @@ const Books: Array<{ name: string, description: string, uri: string }> = [
     uri: "/bioQuestions/BX_2.json"
   },
   {
-    name: "必修三",
-    description: "稳态与环境",
-    uri: "/bioQuestions/BX_3.json"
-  },
-  {
     name: "选择性必修一",
     description: "稳态与调节",
     uri: "/bioQuestions/XB_1.json"
@@ -39,12 +34,12 @@ const { mdAndUp } = useDisplay();
 const router = useRouter();
 const store = bioStore();
 interface selectorState {
-  selectedBooks: {name: string, description: string, uri: string} | undefined
+  selectedBooks: {name: string, description: string, uri: string} 
   selectedQuestions: Array<string[]> | undefined
   questions: Array<Array<string>> | undefined
 }
 const state: selectorState = reactive({
-  selectedBooks: undefined,
+  selectedBooks: {name: "", description: "", uri: ""},
   selectedQuestions: [],
   questions: undefined,
 })
@@ -105,7 +100,7 @@ function getSetence(){
           <v-select
             v-model="state.selectedBooks"
             :items="Books"
-            :hint="`${state.selectedBooks == undefined? 'wait for a select': state.selectedBooks.description}`"
+            :hint="`${state.selectedBooks.name == ''? 'wait for a select': state.selectedBooks.description}`"
             item-title="name"
             label="Book"
             persistent-hint
