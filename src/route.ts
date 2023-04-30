@@ -3,7 +3,16 @@ import BiologySelector from './views/BiologySelector.vue';
 import { createRouter } from "vue-router";
 import { createWebHashHistory } from 'vue-router';
 const routes = [
-    {path: '/', component: BiologySelector}
+    {
+        name: "player",
+        path: '/player',
+        component: BiologyPlayer,
+    }, 
+    {
+        name: "selector",
+        path: '/player/bioSelector',
+        component: BiologySelector
+    }
 ]
 
 const router = createRouter({

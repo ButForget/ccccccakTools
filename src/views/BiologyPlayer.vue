@@ -14,7 +14,7 @@ player.onend = function () {
     state.isPlaying = false;
   } else setTimeout(() => {
     speechSynthesis.resume()
-  }, playStore.playTimeout);
+  }, 1000);
 
 }
 
@@ -27,9 +27,9 @@ function play(): void {
   }
 
   playStore
-      .names
+      .questions
       .forEach((element) => {
-        player.text = element;
+        player.text = element.name;
         speechSynthesis.speak(player);
       });
 }
@@ -56,7 +56,7 @@ function pause(): void {
 
         <VBtn hidden icon="mdi-set"></VBtn>
       </v-col>
-
+        <v-select></v-select>
     </v-row>
     <div style="position: absolute;bottom: 20px;right: 10px">
       <VBtn icon="mdi-eye" @click="" size="x-large"></VBtn>

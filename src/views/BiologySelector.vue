@@ -1,66 +1,99 @@
-<script lang="ts" setup xmlns="http://www.w3.org/1999/html">
-import {ref} from 'vue';
+<script lang="ts" setup>
+import {reactive, ref, Ref, watch} from 'vue';
 import { useDisplay } from 'vuetify'
-const content: Array<{ name: string, description: string, id: number }> = [
+import { useRouter } from 'vue-router';
+import { bioStore } from '../store';
+const Books: Array<{ name: string, description: string, uri: string }> = [
   {
     name: "必修一",
     description: "分子与细胞",
-    id: 0,
+    uri: "/bioQuestions/BX_1.json"
   },
   {
     name: "必修二",
     description: "遗传与进化",
-    id: 1,
+    uri: "/bioQuestions/BX_2.json"
   },
   {
     name: "必修三",
     description: "稳态与环境",
-    id: 2,
+    uri: "/bioQuestions/BX_3.json"
   },
   {
     name: "选择性必修一",
     description: "稳态与调节",
-    id: 3,
+    uri: "/bioQuestions/XB_1.json"
   },
   {
     name: "选择性必修二",
     description: "生物与环境",
-    id: 4,
+    uri: "/bioQuestions/XB_2.json"
   },
   {
     name: "选择性必修三",
     description: "生物技术与工程",
-    id: 5,
+    uri: "/bioQuestions/XB_3.json"
   },
 ];
 const { mdAndUp } = useDisplay();
+const router = useRouter();
+const store = bioStore();
+interface selectorState {
+  selectedBooks: {name: string, description: string, uri: string} | undefined
+  selectedQuestions: Array<{name: string, description: string}> | undefined
+  questions: Array<{name: string, description: string}> | undefined
+}
+const state: selectorState = reactive({
+  selectedBooks: undefined,
+  selectedQuestions: [],
+  questions: undefined,
+})
+
+watch(() => state.selectedBooks, () => {
+  let book = state.selectedBooks;
+  if(book == undefined || book.name == "") return;
+
+  fetch(book.uri)
+    .then(res => {return res.json()})
+    .then(data => { state.questions = data['list']})
+    .catch(console.error);
+})
+
+function toPlay(): void{
+  store.questions = state.selectedQuestions == undefined? []: state.selectedQuestions;
+  router.push({name: "player"});
+}
+
 function getSetence(){
   fetch('https://v1.hitokoto.cn')
       .then(response => response.json())
       .then(data => {
         return data.hitokoto;
       })
-      .catch(console.error)
+      .catch(console.error);
 }
-let items = ref(content);
-let selectedBooks = ref([{name: ""}]);
-let selectedQuestions = ref([]);
+
 </script>
 
 <template>
   <v-container>
-    <p>{{ selectedQuestions }}</p>
     <div class="overflow-auto overflow-x-hidden"
          :style="{ height: mdAndUp ? '80vh' : '70vh' }">
       <v-row class="justify-center">
-        <v-col v-for="n in 200" class="d-flex" lg="6" sm="5">
+        <v-col 
+          v-if="state.selectedBooks != undefined && state.questions != undefined"
+          v-for="(item, index) in state.questions"
+          class="d-flex" lg="6" sm="5"
+        >
           <v-card class="justify-center" width="70vh">
             <v-card-item density="compact">
-            <v-checkbox :label="n"
-                        :value="n"
-                        v-model="selectedQuestions">
+            <v-checkbox
+              :label="item.name"
+              :value="item"
+              v-model="state.selectedQuestions"
+            >
             </v-checkbox>
-            <v-card-text class="text-h6 justify-center">{{ "a".repeat(n) }}</v-card-text>
+            <v-card-text class="text-h6 justify-center">{{ item.description }}</v-card-text>
             </v-card-item>
           </v-card>
         </v-col>
@@ -70,14 +103,18 @@ let selectedQuestions = ref([]);
       <v-row class="justify-center">
         <v-col cols="6">
           <v-select
-              v-model="selectedBooks"
-              :items="items"
-              item-title="name"
-              label="Book"
-              persistent-hint
-              return-object
+            v-model="state.selectedBooks"
+            :items="Books"
+            :hint="`${state.selectedBooks == undefined? 'wait for a select': state.selectedBooks.description}`"
+            item-title="name"
+            label="Book"
+            persistent-hint
+            return-object
           >
           </v-select>
+        </v-col>
+        <v-col cols="2">
+          <v-btn icon="mdi-check" @click="toPlay"></v-btn>
         </v-col>
       </v-row>
     </v-container>
