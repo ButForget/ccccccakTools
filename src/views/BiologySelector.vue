@@ -33,6 +33,8 @@ const Books: Array<{ name: string, description: string, uri: string }> = [
 const { mdAndUp } = useDisplay();
 const router = useRouter();
 const store = bioStore();
+
+//selector 内部状态
 interface selectorState {
   selectedBooks: {name: string, description: string, uri: string} 
   selectedQuestions: Array<string[]> | undefined
@@ -44,6 +46,7 @@ const state: selectorState = reactive({
   questions: undefined,
 })
 
+//检测用户是否选中书目, 若选中, 获取该书目对应的资源
 watch(() => state.selectedBooks, () => {
   let book = state.selectedBooks;
   if(book == undefined || book.name == "") return;
