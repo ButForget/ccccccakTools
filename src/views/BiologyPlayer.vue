@@ -1,31 +1,36 @@
 <script lang="ts" setup>
-import {reactive, ref} from 'vue';
+import {reactive} from 'vue';
 import {bioStore} from '../store';
-import { stat } from 'fs';
 
 const state = reactive({
   isPlaying: false,
-  positon: 0,
   nowPositon: 0,
 });
 const playStore = bioStore();
 
+let position = 0;
 let questions = playStore.questions;
 let player = new SpeechSynthesisUtterance();
 
 // function next(){
 player.onend = function () {
-  speechSynthesis.pause();
-  if (!speechSynthesis.pending && !speechSynthesis.speaking) {
+  console.log(position, questions.length);
+  if (position + 1 >= questions.length) {
     speechSynthesis.cancel();
-    state.positon = 0;
+    position = 0;
+    state.nowPositon = position;
     state.isPlaying = false;
   }
   else {
-    state.positon++;
-    setTimeout(() => {speechSynthesis.resume()}, 1000);
+    player.text = questions[++position][0] + " 的概念是?";
+    console.log(questions[position][1].length * 500);
+    console.log(player.text);
+    setTimeout(() => {
+      speechSynthesis.speak(player);
+      state.nowPositon = position;
+    }, questions[position][1].length * 500);
   }
-  state.nowPositon = state.positon;
+  
 
 }
 //wait for a fix
@@ -36,13 +41,8 @@ function play(): void {
     speechSynthesis.resume();
     return;
   }
-  playStore
-      .questions
-      .forEach((element) => {
-        console.log(element);
-        player.text = element[0];
-        speechSynthesis.speak(player);
-      });
+  player.text = playStore.questions[0][0] + " 的概念是?";
+  speechSynthesis.speak(player);
 }
 
 function pause(): void {
@@ -57,7 +57,7 @@ function toPrev(): void {
 function toNext(): void {
 
   state.nowPositon= state.nowPositon + 1 >= questions.length? 0: state.nowPositon + 1;
-  console.log(state.positon);
+  console.log(position);
 }
 </script>
 <template>
