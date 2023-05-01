@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import {reactive} from 'vue';
 import {bioStore} from '../store';
-import { useRouter } from 'vue-router';
+import {useRouter} from 'vue-router';
+
 const router = useRouter();
 const state = reactive({
   isPlaying: false,
-  nowPositon: 0,
+  nowPosition: 0,
   timeCount: 0,
 });
 const playStore = bioStore();
@@ -14,10 +15,10 @@ let position = 0;
 let questions = playStore.questions;
 let player = new SpeechSynthesisUtterance();
 let tId: NodeJS.Timer;
-let character_zh_cn_time_ms: number = 500;
+let zhCNCharacterReadTime: number = 500;
 
 player.onend = function () {
-  state.timeCount = (questions[position][1].length * character_zh_cn_time_ms) / 1000;
+  state.timeCount = (questions[position][1].length * zhCNCharacterReadTime) / 1000;
   if(position + 1 < questions.length) {
     player.text = questions[++position][0] + " 的概念是?";
     tId = setInterval(() => {
@@ -25,7 +26,7 @@ player.onend = function () {
       state.timeCount = 1;
       clearInterval(tId);
       speechSynthesis.speak(player);
-      state.nowPositon = position;
+      state.nowPosition = position;
     }
     state.timeCount--;
     }, 1000)
@@ -37,7 +38,7 @@ player.onend = function () {
       clearInterval(tId);
       position = 0;
       state.isPlaying = false;
-      state.nowPositon = position;
+      state.nowPosition = position;
     }
     state.timeCount--;
     }, 1000)
@@ -47,7 +48,7 @@ player.onend = function () {
 function play(): void {
   state.isPlaying = true;
   player.text = questions[position][0] + " 的概念是?";
-  state.nowPositon = position;
+  state.nowPosition = position;
   speechSynthesis.speak(player);
 }
 
@@ -57,22 +58,22 @@ function pause(): void {
   state.timeCount = 0;
   state.isPlaying = false;
   position = position - 1 <= 0? 0: position - 1;
-  state.nowPositon = position;
+  state.nowPosition = position;
 }
 
 function toPrev(): void {
-  state.nowPositon = state.nowPositon - 1 <= 0? 0: state.nowPositon - 1;
+  state.nowPosition = state.nowPosition - 1 <= 0? 0: state.nowPosition - 1;
 }
 
 function toNext(): void {
-  state.nowPositon= state.nowPositon + 1 >= questions.length? 0: state.nowPositon + 1;
+  state.nowPosition= state.nowPosition + 1 >= questions.length? 0: state.nowPosition + 1;
   console.log(position);
 }
 
 function backToSelector(): void {
   speechSynthesis.cancel();
   state.isPlaying = false;
-  state.nowPositon = 0;
+  state.nowPosition = 0;
   router.push({name: "selector"});
 }
 </script>
@@ -86,7 +87,11 @@ function backToSelector(): void {
 
 <v-row>
   <v-col>
-    <p class="d-flex justify-center text-h6"><div>{{state.nowPositon + 1}}</div>/<div>{{ questions.length }}</div></p><!-- timeCountDown -->
+    <div class="d-flex justify-center text-h6">
+    <div>{{ state.nowPosition + 1 }}</div>
+    /
+    <div>{{ questions.length }}</div>
+    </div>
   </v-col>
 </v-row>
 <v-row>
@@ -97,7 +102,7 @@ function backToSelector(): void {
   elevation="8"
   max-width="80%"
 >
-  <v-window v-model="state.nowPositon">
+  <v-window v-model="state.nowPosition">
     <v-window-item
       v-for="item in questions"
     >
@@ -124,14 +129,12 @@ function backToSelector(): void {
 <v-toolbar>
   <template v-slot:prepend>
     <v-btn class="ms-5 mx-1" icon="mdi-arrow-left-thin" @click="toPrev"></v-btn>
-    <v-btn v-show="!state.isPlaying" class="mx-1" icon="mdi-play" @click="play"></v-btn>
-    <v-btn v-show="state.isPlaying" class="mx-1" icon="mdi-pause" @click="pause"></v-btn>
+    <v-btn class="mx-1" :icon="state.isPlaying?'mdi-pause':'mdi-play'" @click="state.isPlaying?pause():play()"></v-btn>
     <v-btn class="mx-1" icon="mdi-arrow-right-thin" @click="toNext"></v-btn>
   </template>
 
   <v-btn class="ms-5 mx-1" icon="mdi-arrow-left-thin" @click="toPrev"></v-btn>
-  <v-btn v-show="!state.isPlaying" class="mx-1" icon="mdi-play" @click="play"></v-btn>
-  <v-btn v-show="state.isPlaying" class="mx-1" icon="mdi-pause" @click="pause"></v-btn>
+  <v-btn class="mx-1" :icon="state.isPlaying?'mdi-pause':'mdi-play'" @click="state.isPlaying?pause():play()"></v-btn>
   <v-btn class="mx-1" icon="mdi-arrow-right-thin" @click="toNext"></v-btn>
 
   <template v-if="$vuetify.display.smAndUp">
