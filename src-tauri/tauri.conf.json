@@ -7,8 +7,8 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "ccccccakTools",
-    "version": "0.0.0"
+    "productName": "SubjectTools",
+    "version": "1.0.0"
   },
   "tauri": {
     "allowlist": {
@@ -27,7 +27,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "cn.cakim.subjecttools",
       "targets": "all"
     },
     "security": {
@@ -40,7 +40,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "ccccccakTools",
+        "title": "SubjectTools",
         "width": 800,
         "height": 600
       }
