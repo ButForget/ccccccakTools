@@ -1,8 +1,8 @@
 [package]
-name = "ccccccakTools"
-version = "0.0.0"
+name = "SubjectTools"
+version = "1.0.0"
 description = "A Tauri App"
-authors = ["you"]
+authors = ["Cak","HakimYu"]
 license = ""
 repository = ""
 edition = "2021"

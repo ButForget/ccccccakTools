@@ -1,13 +1,11 @@
 import { defineStore } from "pinia"
+import { ref, Ref } from "vue";
 
-const bioStore = defineStore("biology", {
-    state: () => {
-        return {
-            names: ["a test string1.", "a test string2"],
-            contents: [],
-            playTimeout: 1000,
-        }
-    }
+
+const bioStore = defineStore("biology", () => {
+    const questions: Ref<Array<string[]>> = ref([]);
+
+    return { questions }
 });
 
 export { bioStore }

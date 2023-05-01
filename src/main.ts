@@ -16,4 +16,5 @@ pinia.use(createPersistedState());
 app.use(router);
 app.use(createVuetify());
 app.use(pinia);
+router.push({name: "selector"});
 app.mount("#app");
