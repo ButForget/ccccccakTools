@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import {reactive} from 'vue';
 import {bioStore} from '../store';
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const state = reactive({
   isPlaying: false,
   nowPositon: 0,
@@ -12,9 +13,8 @@ let position = 0;
 let questions = playStore.questions;
 let player = new SpeechSynthesisUtterance();
 
-// function next(){
+
 player.onend = function () {
-  console.log(position, questions.length);
   if (position + 1 >= questions.length) {
     speechSynthesis.cancel();
     position = 0;
@@ -23,30 +23,25 @@ player.onend = function () {
   }
   else {
     player.text = questions[++position][0] + " 的概念是?";
-    console.log(questions[position][1].length * 500);
-    console.log(player.text);
     setTimeout(() => {
-      speechSynthesis.speak(player);
+      if(!state.isPlaying) return;
       state.nowPositon = position;
+      speechSynthesis.speak(player);
     }, questions[position][1].length * 500);
   }
   
 
 }
-//wait for a fix
-//Error!!!!
+
 function play(): void {
   state.isPlaying = true;
-  if (speechSynthesis.paused) {
-    speechSynthesis.resume();
-    return;
-  }
-  player.text = playStore.questions[0][0] + " 的概念是?";
+  player.text = playStore.questions[position][0] + " 的概念是?";
+  state.nowPositon = position;
   speechSynthesis.speak(player);
 }
 
 function pause(): void {
-  speechSynthesis.pause();
+  speechSynthesis.cancel();
   state.isPlaying = false;
 }
 
@@ -55,9 +50,15 @@ function toPrev(): void {
 }
 
 function toNext(): void {
-
   state.nowPositon= state.nowPositon + 1 >= questions.length? 0: state.nowPositon + 1;
   console.log(position);
+}
+
+function backToSelector(): void {
+  speechSynthesis.cancel();
+  state.isPlaying = false;
+  state.nowPositon = 0;
+  router.push({name: "selector"});
 }
 </script>
 <template>
@@ -123,7 +124,7 @@ function toNext(): void {
         thickness="2"
         vertical
     ></v-divider>
-    <v-btn icon="mdi-arrow-left-top" @click="$router.push({name: 'selector'})"></v-btn>
+    <v-btn icon="mdi-arrow-left-top" @click="backToSelector"></v-btn>
   </template>
 </v-toolbar>
 </div>
