@@ -6,47 +6,62 @@ const router = useRouter();
 const state = reactive({
   isPlaying: false,
   nowPositon: 0,
+  timeCount: 0,
 });
 const playStore = bioStore();
 
 let position = 0;
 let questions = playStore.questions;
 let player = new SpeechSynthesisUtterance();
-
+let tId: NodeJS.Timer;
+let character_zh_cn_time_ms: number = 500;
 
 player.onend = function () {
-  if (position + 1 >= questions.length) {
-    speechSynthesis.cancel();
-    position = 0;
-    state.nowPositon = position;
-    state.isPlaying = false;
+  state.timeCount = (questions[position][1].length * character_zh_cn_time_ms) / 1000;
+  if(position + 1 < questions.length) {
+    player.text = questions[++position][0] + " 的概念是?";
+    tId = setInterval(() => {
+    if(state.timeCount - 1 <= 0) {
+      state.timeCount = 1;
+      clearInterval(tId);
+      speechSynthesis.speak(player);
+      state.nowPositon = position;
+    }
+    state.timeCount--;
+    }, 1000)
   }
   else {
-    player.text = questions[++position][0] + " 的概念是?";
-    setTimeout(() => {
-      if(!state.isPlaying) return;
+    tId = setInterval(() => {
+    if(state.timeCount - 1 <= 0) {
+      state.timeCount = 1;
+      clearInterval(tId);
+      position = 0;
+      state.isPlaying = false;
       state.nowPositon = position;
-      speechSynthesis.speak(player);
-    }, questions[position][1].length * 500);
+    }
+    state.timeCount--;
+    }, 1000)
   }
-  
-
 }
 
 function play(): void {
   state.isPlaying = true;
-  player.text = playStore.questions[position][0] + " 的概念是?";
+  player.text = questions[position][0] + " 的概念是?";
   state.nowPositon = position;
   speechSynthesis.speak(player);
 }
 
 function pause(): void {
   speechSynthesis.cancel();
+  clearInterval(tId);
+  state.timeCount = 0;
   state.isPlaying = false;
+  position = position - 1 <= 0? 0: position - 1;
+  state.nowPositon = position;
 }
 
 function toPrev(): void {
-  state.nowPositon = state.nowPositon + 1 <= 0? 0: state.nowPositon - 1;
+  state.nowPositon = state.nowPositon - 1 <= 0? 0: state.nowPositon - 1;
 }
 
 function toNext(): void {
@@ -65,7 +80,7 @@ function backToSelector(): void {
 <v-container>
 <v-row>
   <v-col>
-    <p class="d-flex justify-center text-h1">5</p><!-- timeCountDown -->
+    <p class="d-flex justify-center text-h1">{{ state.timeCount }}s</p><!-- timeCountDown -->
   </v-col>
 </v-row>
 
@@ -92,7 +107,9 @@ function backToSelector(): void {
           width="60vh"
       >
       <v-card-text class="d-flex fill-height align-center justify-center">
-          <v-scale-transition>{{ item[0] }}</v-scale-transition>
+          <v-scale-transition>
+            <p class="d-flex justify-center text-h5">{{ item[0] + "的概念是?"}}</p>
+          </v-scale-transition>
       </v-card-text>
       </v-card>
     </v-window-item>
