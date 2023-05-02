@@ -14,7 +14,7 @@ const playStore = bioStore();
 let position = 0;
 let questions = playStore.questions;
 let player = new SpeechSynthesisUtterance();
-let tId: NodeJS.Timer;
+let tId: NodeJS.Timer | undefined = undefined;
 let zhCNCharacterReadTime: number = 500;
 
 player.onend = function () {
@@ -129,12 +129,12 @@ function backToSelector(): void {
 <v-toolbar>
   <template v-slot:prepend>
     <v-btn class="ms-5 mx-1" icon="mdi-arrow-left-thin" @click="toPrev"></v-btn>
-    <v-btn class="mx-1" :icon="state.isPlaying?'mdi-pause':'mdi-play'" @click="state.isPlaying?pause():play()"></v-btn>
+    <v-btn class="mx-1" :icon="state.isPlaying?'mdi-pause':'mdi-play'" @click="state.isPlaying? pause: play"></v-btn>
     <v-btn class="mx-1" icon="mdi-arrow-right-thin" @click="toNext"></v-btn>
   </template>
 
   <v-btn class="ms-5 mx-1" icon="mdi-arrow-left-thin" @click="toPrev"></v-btn>
-  <v-btn class="mx-1" :icon="state.isPlaying?'mdi-pause':'mdi-play'" @click="state.isPlaying?pause():play()"></v-btn>
+  <v-btn class="mx-1" :icon="state.isPlaying?'mdi-pause':'mdi-play'" @click="state.isPlaying? pause: play"></v-btn>
   <v-btn class="mx-1" icon="mdi-arrow-right-thin" @click="toNext"></v-btn>
 
   <template v-if="$vuetify.display.smAndUp">

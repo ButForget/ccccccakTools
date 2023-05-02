@@ -38,15 +38,15 @@ const store = bioStore();
 //selector 内部状态
 interface selectorState {
   selectedBooks: {name: string, description: string, uri: string} 
-  selectedQuestions: Array<string[]> | undefined
-  questions: Array<Array<string>> | undefined
+  selectedQuestions: string[][]
+  questions: string[][]
   menu: boolean | false
   randomValue: number | 0
 }
 const state: selectorState = reactive({
   selectedBooks: {name: "", description: "", uri: ""},
   selectedQuestions: [],
-  questions: undefined,
+  questions: [],
   menu: false,
   randomValue:0
 })
@@ -65,7 +65,7 @@ watch(() => state.selectedBooks, () => {
 })
 
 function toPlay(): void{
-  store.questions = state.selectedQuestions == undefined? []: state.selectedQuestions;
+  store.questions = state.selectedQuestions;
   router.push({name: "player"});
 }
 
@@ -99,10 +99,10 @@ function randomSelect(){
         <v-col 
           v-if="state.selectedBooks !== undefined && state.questions !== undefined"
           v-for="item in state.questions"
-          class="d-flex justify-center" lg="6" sm="10"
+          class="d-flex justify-center" lg="4" md="6" sm="10" cols="10"
         >
           <v-lazy :min-height="200" :options="{'threshold':0.5}" transition="fade-transition">
-          <v-card class="justify-center" width="80vh">
+          <v-card class="justify-center w-auto">
             <v-card-item density="compact">
             <v-checkbox
               :label="item[0]"
