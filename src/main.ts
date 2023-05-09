@@ -8,7 +8,6 @@ import { createPersistedState } from "pinia-plugin-persistedstate";
 
 import 'vuetify/styles'
 import '@mdi/font/css/materialdesignicons.css'
-
 const app = createApp(App);
 const pinia = createPinia();
 pinia.use(createPersistedState());

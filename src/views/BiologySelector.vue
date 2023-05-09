@@ -3,38 +3,40 @@ import {reactive, watch} from 'vue';
 import {useDisplay} from 'vuetify'
 import {useRouter} from 'vue-router';
 import {bioStore} from '../store';
+import {resolveResource} from "@tauri-apps/api/path"
+import {readTextFile} from "@tauri-apps/api/fs"
+import { onBeforeMount } from 'vue';
 
 const Books: Array<{ name: string, description: string, uri: string }> = [
   {
     name: "必修一",
     description: "分子与细胞",
-    uri: "/bioQuestions/BX_1.json"
+    uri: "BX_1.json"
   },
   {
     name: "必修二",
     description: "遗传与进化",
-    uri: "/bioQuestions/BX_2.json"
+    uri: "BX_2.json"
   },
   {
     name: "选择性必修一",
     description: "稳态与调节",
-    uri: "/bioQuestions/XB_1.json"
+    uri: "XB_1.json"
   },
   {
     name: "选择性必修二",
     description: "生物与环境",
-    uri: "/bioQuestions/XB_2.json"
+    uri: "XB_2.json"
   },
   {
     name: "选择性必修三",
     description: "生物技术与工程",
-    uri: "/bioQuestions/XB_3.json"
+    uri: "XB_3.json"
   },
 ];
 const { mdAndUp } = useDisplay();
 const router = useRouter();
 const store = bioStore();
-
 //selector 内部状态
 interface selectorState {
   selectedBooks: {name: string, description: string, uri: string} 
@@ -58,13 +60,16 @@ watch(() => state.selectedBooks, () => {
   let book = state.selectedBooks;
   if(book == undefined || book.name == "") return;
 
-  fetch(book.uri)
-    .then(res => {return res.json()})
-    .then(data => { state.questions = data['list']})
-    .catch(console.error);
+  resolveResource("./resource" + book.uri)
+    .then((path) => {
+      readTextFile(path).then((value) => {
+        state.questions = JSON.parse(value)['list'];
+      })
+    })
 })
 
 function toPlay(): void{
+  store.questions = [];
   store.questions = state.selectedQuestions;
   router.push({name: "player"});
 }
@@ -99,10 +104,10 @@ function randomSelect(){
         <v-col 
           v-if="state.selectedBooks !== undefined && state.questions !== undefined"
           v-for="item in state.questions"
-          class="d-flex justify-center" lg="4" md="6" sm="10" cols="10"
+          class="d-flex justify-center" lg="4" md="6" sm="7" cols="10"
         >
           <v-lazy :min-height="200" :options="{'threshold':0.5}" transition="fade-transition">
-          <v-card class="justify-center w-auto">
+          <v-card class="justify-center w-100">
             <v-card-item density="compact">
             <v-checkbox
               :label="item[0]"
