@@ -2,7 +2,7 @@
 name = "subject_tools"
 version = "1.0.0"
 description = "A Tauri App"
-authors = ["Cak","HakimYu"]
+authors = ["Cak", "HakimYu"]
 license = ""
 repository = ""
 edition = "2021"
