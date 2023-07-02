@@ -70,7 +70,6 @@ function toPlayer(): void {
     </div>
     <v-container style="position: absolute; top: 5em; right: 3em;">
       <v-row class="justify-end">
-
         <v-btn class="mx-2" :icon="selectedQuestions.length !== 0 ? 'mdi-select-remove' : 'mdi-select-all'"
           @click="selectedQuestions.length !== 0 ? removeAll() : selectAll()">
         </v-btn>
@@ -79,7 +78,6 @@ function toPlayer(): void {
             <template v-slot:activator="{ props }">
               <v-btn v-bind="props" class="mx-2" icon="mdi-dice-multiple-outline"></v-btn>
             </template>
-
             <v-card min-width="300">
               <v-card-actions>
                 <v-expand-transition>
@@ -92,7 +90,6 @@ function toPlayer(): void {
             </v-card>
           </v-menu>
         </div>
-
       </v-row>
     </v-container>
     <v-btn size="x-large" style="position: absolute; right: 9rem; bottom: 7rem;" icon="mdi-check" @click="toPlayer"></v-btn>
