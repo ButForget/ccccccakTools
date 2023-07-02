@@ -93,14 +93,14 @@ function toNext(): void {
           </v-row>
           <v-window v-model="state.nowPosition">
             <v-window-item v-for="item in questions">
-              <v-card class="ma-4" height="30vh" width="60vh">
-
+              <div class="d-flex justify-center">
+              <v-card class="ma-4" height="30vh" width="30vw">
                 <v-divider></v-divider>
-
                 <v-card-text>
                   <h1>{{ item[0] }}</h1>
                 </v-card-text>
               </v-card>
+              </div>
             </v-window-item>
           </v-window>
           <v-card-actions class="justify-space-between">
