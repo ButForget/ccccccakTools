@@ -1,26 +1,26 @@
 {"map": [
   {
-  "name": "必修一",
+  "name": "生物：必修一",
   "description": "分子与细胞",
   "uri": "BX_1.json"
   },
   {
-  "name": "必修二",
+  "name": "生物：必修二",
   "description": "遗传与进化",
   "uri": "BX_2.json"
   },
   {
-  "name": "选择性必修一",
+  "name": "生物：选择性必修一",
   "description": "稳态与调节",
   "uri": "XB_1.json"
   },
   {
-  "name": "选择性必修二",
+  "name": "生物：选择性必修二",
   "description": "生物与环境",
   "uri": "XB_2.json"
   },
   {
-  "name": "选择性必修三",
+  "name": "生物：选择性必修三",
   "description": "生物技术与工程",
   "uri": "XB_3.json"
   }
