@@ -11,6 +11,13 @@ import '@mdi/font/css/materialdesignicons.css'
 const app = createApp(App);
 const pinia = createPinia();
 pinia.use(createPersistedState());
+router.beforeEach((to, from)=>{
+    speechSynthesis.cancel();
+
+
+    return true;
+});
+
 
 app.use(router);
 app.use(createVuetify({blueprint: md3}));

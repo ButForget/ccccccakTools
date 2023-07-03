@@ -31,7 +31,7 @@ function clickOutside(): void {
           <v-list-item title="BioPlyer" @click="$router.push({ name: 'selector' })"
             prepend-icon="mdi-play-circle-outline">
           </v-list-item>
-          <v-list-item title="7net" prepend-icon="mdi-book-open-blank-variant">
+          <v-list-item title="7net" @click="$router.push({name: '7Login'})" prepend-icon="mdi-book-open-blank-variant">
 
           </v-list-item>
         </v-list>

@@ -1,6 +1,7 @@
 import BiologyPlayer from './views/BiologyPlayer.vue';
 import BooksSelector from './views/BooksSelector.vue';
 import Questions from './views/Questions.vue';
+import SevenLogin from './views/SevenLogin.vue';
 import App from "./App.vue";
 import { createRouter, createWebHashHistory } from "vue-router";
 
@@ -25,6 +26,12 @@ const routes = [
         name: "questions",
         path: '/selector/questions/:name',
         component: Questions
+    },
+    {
+        name: "7Login",
+        path: '/7net/login',
+        component: SevenLogin,
+        meta: {isRoot: true}
     }
 ]
 
@@ -32,10 +39,5 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes,
 })
-router.beforeEach((to, from)=>{
-    speechSynthesis.cancel();
 
-
-    return true;
-})
 export { router };

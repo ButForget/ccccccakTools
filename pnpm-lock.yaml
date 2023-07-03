@@ -4,6 +4,9 @@ dependencies:
   '@tauri-apps/api':
     specifier: ^1.4.0
     version: 1.4.0
+  js-base64:
+    specifier: ^3.7.5
+    version: 3.7.5
   pinia:
     specifier: ^2.1.4
     version: 2.1.4(typescript@4.9.5)(vue@3.3.4)
@@ -612,6 +615,10 @@ packages:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
     dev: true
+
+  /js-base64@3.7.5:
+    resolution: {integrity: sha512-3MEt5DTINKqfScXKfJFrRbxkrnk2AxPWGBL/ycjz4dK8iqiSJ06UxD8jh8xuh6p10TX4t2+7FsBYVxxQbMg+qA==}
+    dev: false
 
   /locate-path@5.0.0:
     resolution: {integrity: sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==}
