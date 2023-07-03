@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "SubjectTools",
+    "productName": "subject_tools",
     "version": "1.0.0"
   },
   "tauri": {
@@ -16,9 +16,35 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "fs": {
+        "scope": ["$RESOURCE/**"],
+        "all": false,
+        "readFile": true,
+        "copyFile": true,
+        "writeFile": true
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {
+      "windows": {
+        "allowDowngrades": true,
+        "certificateThumbprint": null,
+        "digestAlgorithm": null,
+        "timestampUrl": null,
+        "tsp": false,
+        
+        "webviewFixedRuntimePath": null,
+        "webviewInstallMode": {
+          "silent": true,
+          "type": "downloadBootstrapper"
+        },
+        "wix": {
+          "language": ["en-US", "zh-CN"]
+        }
+      },
       "active": true,
       "icon": [
         "icons/32x32.png",
@@ -28,7 +54,8 @@
         "icons/icon.ico"
       ],
       "identifier": "cn.cakim.subjecttools",
-      "targets": "all"
+      "targets": "all",
+      "resources": ["resource/**", "resource/*"]
     },
     "security": {
       "csp": null

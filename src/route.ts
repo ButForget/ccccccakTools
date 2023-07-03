@@ -1,17 +1,30 @@
 import BiologyPlayer from './views/BiologyPlayer.vue';
-import BiologySelector from './views/BiologySelector.vue';
-import {createRouter, createWebHashHistory} from "vue-router";
+import BooksSelector from './views/BooksSelector.vue';
+import Questions from './views/Questions.vue';
+import App from "./App.vue";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 const routes = [
+    {
+        name: "app",
+        path: "/",
+        component: App
+    },
     {
         name: "player",
         path: '/player',
         component: BiologyPlayer,
-    }, 
+    },
     {
         name: "selector",
-        path: '/player/bioSelector',
-        component: BiologySelector
+        path: '/selector',
+        component: BooksSelector,
+        meta: {isRoot: true}
+    },
+    {
+        name: "questions",
+        path: '/selector/questions/:name',
+        component: Questions
     }
 ]
 
@@ -19,5 +32,10 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes,
 })
+router.beforeEach((to, from)=>{
+    speechSynthesis.cancel();
 
-export {router};
+
+    return true;
+})
+export { router };
