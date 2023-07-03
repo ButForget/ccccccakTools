@@ -5,7 +5,7 @@ import { useDisplay } from "vuetify/lib/framework.mjs";
 import { useRouter } from 'vue-router';
 import { Ref } from "vue";
 import { ref } from "vue";
-const { mdAndUp } = useDisplay();
+const { lgAndUp } = useDisplay();
 const router = useRouter();
 
 interface Book {
@@ -30,11 +30,11 @@ function toQuestions(bookName: string): void {
 <template>
   <v-container fluid>
 
-    <div class="overflow-auto overflow-x-hidden" :style="{ height: mdAndUp ? '80vh' : '70vh' }">
+    <div class="overflow-auto overflow-x-hidden" :style="{ height: lgAndUp ? '80vh' : '70vh' }">
       <v-row v-show="books.length !== 0">
-        <v-col v-for="item in books" class="d-flex justify-center" :cols="mdAndUp? 6: 12">
+        <v-col v-for="item in books" class="d-flex justify-center" :cols="lgAndUp? 6: 12">
           <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
-            <v-card :title="item.name" :width="mdAndUp? 500: 400" height="150" prepend-icon="mdi-book">
+            <v-card :title="item.name" :width="lgAndUp? 500: 450" height="150" prepend-icon="mdi-book">
               <v-card-subtitle>
                 {{ item.description }}
               </v-card-subtitle>

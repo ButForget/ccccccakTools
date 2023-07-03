@@ -46,6 +46,7 @@ player.onend = function () {
   }
 }
 
+play();
 function play(): void {
   state.isPlaying = true;
   player.text = questions[position][0] + " 的概念是?";
@@ -53,14 +54,14 @@ function play(): void {
   speechSynthesis.speak(player);
 }
 
-function pause(): void {
-  speechSynthesis.cancel();
-  clearInterval(tId);
-  state.timeCount = 0;
-  state.isPlaying = false;
-  position = position - 1 <= 0 ? 0 : position - 1;
-  state.nowPosition = position;
-}
+// function pause(): void {
+//   speechSynthesis.cancel();
+//   clearInterval(tId);
+//   state.timeCount = 0;
+//   state.isPlaying = false;
+//   position = position - 1 <= 0 ? 0 : position - 1;
+//   state.nowPosition = position;
+// }
 
 function toPrev(): void {
   state.nowPosition = state.nowPosition - 1 <= 0 ? 0 : state.nowPosition - 1;
@@ -94,14 +95,12 @@ function toNext(): void {
           <v-window v-model="state.nowPosition">
             <v-window-item v-for="item in questions">
               <div class="d-flex justify-center">
-                <v-card class="ma-4" height="30vh" width="30vw">
-                  <v-divider></v-divider>
-                  <div class="d-flex align-center justify-center" style="height: 100%;">
-                    <v-card-text class="text-center">
-                      <h1>{{ item[0] }}</h1>
-                    </v-card-text>
-                  </div>
-                </v-card>
+              <v-card class="ma-4" height="30vh" width="50vw">
+                <v-divider></v-divider>
+                <v-card-text class="d-flex justify-center align-center">
+                  <h1>{{ item[0] }}</h1>
+                </v-card-text>
+              </v-card>
               </div>
             </v-window-item>
           </v-window>

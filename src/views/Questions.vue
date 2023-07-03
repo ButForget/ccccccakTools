@@ -6,7 +6,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Ref } from 'vue';
 import { ref, reactive } from 'vue';
 import { bioStore } from '../store';
-const { mdAndUp } = useDisplay();
+const { lgAndUp } = useDisplay();
 const router = useRouter();
 const route = useRoute();
 const store = bioStore();
@@ -53,11 +53,11 @@ function toPlayer(): void {
 </script>
 <template>
   <v-container v-if="questions.length != 0" class="d-flex" fluid>
-    <div class="overflow-auto overflow-x-hidden" :style="{ height: mdAndUp ? '80vh' : '70vh' }">
+    <div class="overflow-auto overflow-x-hidden" :style="{ height: lgAndUp ? '80vh' : '70vh' }">
       <v-row class="justify-center">
-        <v-col v-for="item in questions" class="d-flex" :class="mdAndUp ? '' : 'justify-center'" :cols="mdAndUp ? 6 : 12">
+        <v-col v-for="item in questions" class="d-flex" :class="lgAndUp ? '' : 'justify-center'" :cols="lgAndUp ? 6 : 12">
           <v-lazy :min-height="200" :options="{ 'threshold': 0.5 }" transition="fade-transition">
-            <v-card class="justify-center" :width="mdAndUp ? 500 : 400">
+            <v-card class="justify-center" :width="lgAndUp ? 500 : 450">
               <v-card-item density="compact">
                 <v-checkbox :label="item[0]" :value="item" v-model="selectedQuestions">
                 </v-checkbox>
@@ -68,30 +68,28 @@ function toPlayer(): void {
         </v-col>
       </v-row>
     </div>
-    <v-container style="position: absolute; top: 5em; right: 3em;">
-      <v-row class="justify-end">
-        <v-btn class="mx-2" :icon="selectedQuestions.length !== 0 ? 'mdi-select-remove' : 'mdi-select-all'"
-          @click="selectedQuestions.length !== 0 ? removeAll() : selectAll()">
-        </v-btn>
-        <div class="text-center">
-          <v-menu v-model="menu.menu" :close-on-content-click="false" location="top">
-            <template v-slot:activator="{ props }">
-              <v-btn v-bind="props" class="mx-2" icon="mdi-dice-multiple-outline"></v-btn>
-            </template>
-            <v-card min-width="300">
-              <v-card-actions>
-                <v-expand-transition>
-                  <v-slider class="mt-6" v-model="menu.randomValue" :min="1" :max="questions.length" :step="1"
-                    thumb-label></v-slider>
-                </v-expand-transition>
-                <v-btn icon="mdi-close" @click="menu.menu = false"></v-btn>
-                <v-btn icon="mdi-check" @click="randomSelect()"></v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-menu>
-        </div>
-      </v-row>
-    </v-container>
-    <v-btn size="x-large" style="position: absolute; right: 9rem; bottom: 7rem;" icon="mdi-check" @click="toPlayer"></v-btn>
+    <v-btn style="position: absolute; right: 8rem; bottom: 7rem;" size="small" class="mx-2"
+      :icon="selectedQuestions.length !== 0 ? 'mdi-select-remove' : 'mdi-select-all'"
+      @click="selectedQuestions.length !== 0 ? removeAll() : selectAll()">
+    </v-btn>
+    <div style="position: absolute; right: 5rem; bottom: 7rem;" class="text-center">
+      <v-menu v-model="menu.menu" :close-on-content-click="false" location="top">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" size="small" class="mx-2" icon="mdi-dice-multiple-outline"></v-btn>
+        </template>
+        <v-card min-width="300">
+          <v-card-actions>
+            <v-expand-transition>
+              <v-slider class="mt-6" v-model="menu.randomValue" :min="1" :max="questions.length" :step="1"
+                thumb-label></v-slider>
+            </v-expand-transition>
+            <v-btn icon="mdi-close"  @click="menu.menu = false"></v-btn>
+            <v-btn icon="mdi-check"  @click="randomSelect()"></v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-menu>
+    </div>
+    <v-btn size="x-large" style="position: absolute; right: 12rem; bottom: 7rem;" icon="mdi-check"
+      @click="toPlayer"></v-btn>
   </v-container>
 </template>

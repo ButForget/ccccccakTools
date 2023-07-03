@@ -32,5 +32,10 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes,
 })
+router.beforeEach((to, from)=>{
+    speechSynthesis.cancel();
 
+
+    return true;
+})
 export { router };

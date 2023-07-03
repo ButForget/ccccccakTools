@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import { open } from '@tauri-apps/api/shell'
 </script>
 <template>
-  <v-card>
+  <v-card width="500">
     <v-card-title>
       <h2>Subject Tools</h2>
     </v-card-title>
@@ -15,7 +16,7 @@
         吾等真誠期望，此生物知識點聆聽軟體能為學子們帶來便利與收益。讓我們攜手合作，共同探索生物學之奧秘，培養對生命之敬愛之情。</p>
     </v-card-text>
     <v-card-actions>
-      <v-btn text href="https://github.com/ButForget/ccccccakTools">GitHub</v-btn>
+      <v-btn variant="text" @click="open('https://github.com/ButForget/ccccccakTools')">GitHub</v-btn>
     </v-card-actions>
   </v-card>
 </template>
