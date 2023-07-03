@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { reactive } from 'vue';
-import { bioStore } from '../store';
-import { useRouter } from 'vue-router';
-import { useDisplay } from 'vuetify/lib/framework.mjs';
+import {reactive} from 'vue';
+import {bioStore} from '../store';
+import {useRouter} from 'vue-router';
+import {useDisplay} from 'vuetify/lib/framework.mjs';
+
 const router = useRouter();
 const mdAndUp = useDisplay();
 const state = reactive({
@@ -31,8 +32,7 @@ player.onend = function () {
       }
       state.timeCount--;
     }, 1000)
-  }
-  else {
+  } else {
     tId = setInterval(() => {
       if (state.timeCount - 1 <= 0) {
         state.timeCount = 1;
@@ -76,7 +76,7 @@ function toNext(): void {
   <v-container>
     <v-row>
       <v-col class="d-flex">
-        <v-card class="mx-auto" elevation="2" :width="mdAndUp? 800: 400">
+        <v-card :width="mdAndUp? 800: 400" class="mx-auto" elevation="2">
           <v-row>
             <v-col>
               <p class="d-flex justify-center text-h1">{{ state.timeCount }}s</p><!-- timeCountDown -->
@@ -94,18 +94,20 @@ function toNext(): void {
           <v-window v-model="state.nowPosition">
             <v-window-item v-for="item in questions">
               <div class="d-flex justify-center">
-              <v-card class="ma-4" height="30vh" width="30vw">
-                <v-divider></v-divider>
-                <v-card-text>
-                  <h1>{{ item[0] }}</h1>
-                </v-card-text>
-              </v-card>
+                <v-card class="ma-4" height="30vh" width="30vw">
+                  <v-divider></v-divider>
+                  <div class="d-flex align-center justify-center" style="height: 100%;">
+                    <v-card-text class="text-center">
+                      <h1>{{ item[0] }}</h1>
+                    </v-card-text>
+                  </div>
+                </v-card>
               </div>
             </v-window-item>
           </v-window>
           <v-card-actions class="justify-space-between">
-            <v-btn variant="plain" icon="mdi-chevron-left" @click="toPrev"></v-btn>
-            <v-btn variant="plain" icon="mdi-chevron-right" @click="toNext"></v-btn>
+            <v-btn icon="mdi-chevron-left" variant="plain" @click="toPrev"></v-btn>
+            <v-btn icon="mdi-chevron-right" variant="plain" @click="toNext"></v-btn>
           </v-card-actions>
         </v-card>
         <VBtn hidden icon="mdi-set"></VBtn>
