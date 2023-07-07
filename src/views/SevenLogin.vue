@@ -1,14 +1,23 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Ref } from 'vue';
-import { getUrl } from '../tools';
-import { Base64 } from 'js-base64'
+import {  getToken } from '../7net';
 import { SubmitEventPromise } from 'vuetify/lib/framework.mjs';
+import { SevenNetUser } from '../store';
+import { useRouter } from 'vue-router';
+const user = SevenNetUser();
+const router = useRouter();
 let tab: Ref<string> = ref("password");
-let tabs: string[] = ["password", "smsCode"];
 let username: Ref<string> = ref("");
 let password: Ref<string> = ref("");
+let snackbar: Ref<boolean> = ref(false);
+let resMsg: Ref<string> = ref("");
 
+
+let tabs: string[] = ["password", "smsCode"];
+/**
+ * username filter rules to make sure the username and password is fit to frame.
+ */
 let usernameRules = [(value: string | undefined) => {
   if (!value) return "username is required.";
   if (/^1+\d{10}$/.test(value) == false) return "username is invaild.";
@@ -22,20 +31,22 @@ let passwordRules = [(value: string | undefined) => {
 }]
 
 async function passwordLogin(event: SubmitEventPromise) {
-  if((await event).valid == false) return;
-  fetch(getUrl("my", "/login"), {
-    method: "POST",
-    body: JSON.stringify({
-      userCode: username.value,
-      password: Base64.encode(password.value),
-    }),
-    headers: {
-      'Version': "4.2.5",
-      'Content-type': 'application/json',
-    },
-  }).then((response) => {
-    console.log(response);
-  });
+  if ((await event).valid == false)
+    return;
+
+  getToken(username.value, password.value)
+    .then((token) => {
+      resMsg.value = "登录成功";
+      snackbar.value = true;
+      user.token = token;
+      router.push({ name: '7net' });
+      
+    })
+    .catch((msg)=>{
+      resMsg.value = msg;
+      snackbar.value = true;
+      user.clear();
+    })
 }
 </script>
 <template>
@@ -54,11 +65,11 @@ async function passwordLogin(event: SubmitEventPromise) {
         <v-window-item key="password" value="password">
           <v-card>
             <v-form @submit="passwordLogin">
-              <v-text-field placeholder="1234567890" v-model="username" label="username" :rules="usernameRules" clearable>
+              <v-text-field v-model="username" label="username" :rules="usernameRules" clearable>
               </v-text-field>
               <v-text-field v-model="password" label="password" :rules="passwordRules" clearable>
               </v-text-field>
-              <v-btn type="submit"></v-btn>
+              <v-btn type="submit" elevation="0" variant="text">Log in</v-btn>
             </v-form>
           </v-card>
         </v-window-item>
@@ -67,5 +78,13 @@ async function passwordLogin(event: SubmitEventPromise) {
         </v-window-item>
       </v-window>
     </v-card>
+    <div class="text-center">
+      <v-snackbar v-model="snackbar" multi-line>
+        {{ resMsg }}
+        <template v-slot:actions>
+          <v-btn variant="text" @click="snackbar = false">colse</v-btn>
+        </template>
+      </v-snackbar>
+    </div>
   </v-container>
 </template>

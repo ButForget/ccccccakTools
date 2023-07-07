@@ -25,13 +25,13 @@ function clickOutside(): void {
 
     </v-app-bar>
 
-    <div v-click-outside="{ handler: clickOutside, include }">
-      <v-navigation-drawer v-model="drawer" permanent :rail="rail" @click="rail = false">
-        <v-list density="compact" nav>
+    <div  class="included" v-click-outside="{ handler: clickOutside, include }">
+      <v-navigation-drawer  v-model="drawer" permanent :rail="rail">
+        <v-list  density="compact" nav>
           <v-list-item title="BioPlyer" @click="$router.push({ name: 'selector' })"
             prepend-icon="mdi-play-circle-outline">
           </v-list-item>
-          <v-list-item title="7net" @click="$router.push({name: '7Login'})" prepend-icon="mdi-book-open-blank-variant">
+          <v-list-item title="7net" @click="$router.push({name: '7net'})" prepend-icon="mdi-book-open-blank-variant">
 
           </v-list-item>
         </v-list>

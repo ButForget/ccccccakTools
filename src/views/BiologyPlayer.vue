@@ -112,6 +112,5 @@ function toNext(): void {
         <VBtn hidden icon="mdi-set"></VBtn>
       </v-col>
     </v-row>
-
   </v-container>
 </template>
